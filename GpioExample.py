@@ -17,9 +17,9 @@ neo.pinMode(pinThree, neo.INPUT)  # Use pin three(innerbank) and read set state 
 # Blink example
 for a in range(0, 10):  # Do for five times
     neo.digitalWrite(pinTwo, neo.HIGH)  # write high value to pin
-    sleep(1)  # wait one second
+    sleep(0.01)  # wait one second
     neo.digitalWrite(pinTwo, neo.LOW)  # write low value to pin
-    sleep(1)  # wait one second
+    sleep(0.01)  # wait one second
 
 # Read pin
 print("Current pin(" + str(pinThree) + ") state is: " + str(neo.digitalRead(pinThree))
