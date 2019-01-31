@@ -8,8 +8,8 @@ from time import sleep  # import sleep to wait for blinks
 
 neo = Gpio()  # create new Neo object
 
-pinTwo = 24  # pin to use
-pinThree = 25
+pinTwo = 25  # pin to use
+pinThree = 24
 
 neo.pinMode(pinTwo, neo.OUTPUT)  # Use innerbank pin 2 and set it as output either 0 (neo.INPUT) or 1 (neo.OUTPUT)
 neo.pinMode(pinThree, neo.INPUT)  # Use pin three(innerbank) and read set state to read
