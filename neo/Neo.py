@@ -24,16 +24,16 @@ class Gpio:
             try:
                 with open("/sys/class/gpio/export", "w") as create:
                     create.write(num)
-                with open("/sys/class/gpio/gpio" + self.gpios[current] + "/value", "r") as reads:
+                with open("/sys/class/gpio/gpio" + self.gpios[self.current] + "/value", "r") as reads:
                     self.gpioval[self.current] = reads.read()
-                with open("/sys/class/gpio/gpio" + self.gpios[current] + "/direction", "r") as readdir:
+                with open("/sys/class/gpio/gpio" + self.gpios[self.current] + "/direction", "r") as readdir:
                     self.gpiodir[self.current] = (1 if "out" in readdir.read() else 0)
                 self.current += 1
             except:
                 sleep(0.000001)
-        print "Neo gpios started, make sure arduino isn't using the same pins or you can ruin this board!"
+        print ("Neo gpios started, make sure arduino isn't using the same pins or you can ruin this board!")
 
-    def pinMode(self, pin=2, direction=0):
+    def pinMode(self, pin=25, direction=0):
         try:
             gpio = self.gpios[int(pin)]
             if int(direction) != self.gpiodir[pin]:
@@ -42,10 +42,10 @@ class Gpio:
                 self.gpiodir[pin] = (0 if direction < 1 else 1)
             return True
         except ValueError:
-            print "ERROR: pinMode, value inserted wasn't an int"
+            print ("ERROR: pinMode, value inserted wasn't an int")
             return False
         except:
-            print "ERROR: pinMode, error using pinMode"
+            print ("ERROR: pinMode, error using pinMode")
             return False
 
     '''
@@ -62,7 +62,7 @@ class Gpio:
 				sleep(d)
 		except (KeyboardInterrupt, SystemExit):
 			exit()
-	def pwmWrite(self, pin=2, value = 0):
+	def pwmWrite(self, pin=25, value = 0):
 		try:
 			with open("/sys/class/gpio/gpio"+self.gpios[int(pin)]+"/value", "r") as reads:
 				check = reads.read()
@@ -81,7 +81,7 @@ class Gpio:
 			return False
 	'''
 
-    def digitalWrite(self, pin=2, value=0):
+    def digitalWrite(self, pin=25, value=0):
         try:
             gpio = self.gpios[int(pin)]
             if self.gpiodir[pin] != 1:
@@ -94,13 +94,13 @@ class Gpio:
                 self.gpioval[pin] = (0 if value < 1 else 1)
             return True
         except ValueError:
-            print "ERROR: digitalWrite, value inserted wasn't an int"
+            print ("ERROR: digitalWrite, value inserted wasn't an int")
             return False
         except:
-            print "ERROR: digitalWrite, error running"
+            print ("ERROR: digitalWrite, error running")
             return False
 
-    def digitalRead(self, pin=2):
+    def digitalRead(self, pin=25):
         try:
             gpio = self.gpios[int(pin)]
             if self.gpiodir[pin] != 0:
@@ -111,10 +111,10 @@ class Gpio:
                 self.gpioval[pin] = int(reader.read().replace('\n', ''))
             return self.gpioval[pin]
         except ValueError:
-            print "ERROR: digitalRead, value inserted wasn't an int"
+            print ("ERROR: digitalRead, value inserted wasn't an int")
             return -1
         except:
-            print "ERROR: digitalRead, error running"
+            print ("ERROR: digitalRead, error running")
             return -1
 
 
@@ -143,11 +143,13 @@ class Led:
     def __init__(self):
         self.led = 0
 
-    def on(self):
+    @staticmethod
+    def on():
         with open("/sys/class/leds/led0/brightness", "w") as w:
             w.write("1")
 
-    def off(self):
+    @staticmethod
+    def off():
         with open("/sys/class/leds/led0/brightness", "w") as w:
             w.write("0")
 
@@ -175,7 +177,7 @@ class Temp:
             with open("/sys/class/i2c-dev/i2c-1/device/1-0048/temp1_input", "r") as reader:  # Read i2c millicel file
                 self.temp = (float(reader.read().replace(' ', '').replace('\n', ''))) * (0.001)  # Turn into celcius
         except:
-            print "Snap in sensor is not plugged in!"
+            print ("Snap in sensor is not plugged in!")
         finally:
             return ((self.temp) * 1.8 + 32) if "f" in mode else (self.temp)  # Either return into Far or Celc
 
@@ -204,7 +206,7 @@ class Barometer:
                 self.Tempscale = (float(tsreader.read().replace('\n', '')))
             self.temp = ((self.temp) * (self.Tempscale))
         except:
-            print "Barometer is not plugged in!"
+            print ("Barometer is not plugged in!")
         finally:
             return ((self.temp) * 1.8 + 32) if "f" in mode else (self.temp)
 
@@ -215,7 +217,7 @@ class Barometer:
             with open("/sys/class/i2c-dev/i2c-1/device/1-0060/iio:device0/in_pressure_scale", "r") as psreader:
                 self.Tempress = (float(psreader.read().replace('\n', '')))
         except:
-            print "Barometer is not plugged in!"
+            print ("Barometer is not plugged in!")
         finally:
             return float((self.pressure) * (self.Tempress))
 
@@ -230,7 +232,7 @@ class Accel:
             with open("/sys/class/misc/FreescaleAccelerometer/enable", "w") as enabler:
                 enabler.write("1")
         except:
-            print "Error: No Accel detected"
+            print ("Error: No Accel detected")
 
     def calibrate(self):
         self.valSub = self.get()
@@ -251,7 +253,7 @@ class Accel:
                 except:
                     break
         except:
-            print "Error using accelerometer!"
+            print ("Error using accelerometer!")
         finally:
             for num in range(0, len(self.accel)):
                 self.accel[num] -= self.calib[num]
@@ -268,7 +270,7 @@ class Magno:
             with open("/sys/class/misc/FreescaleMagnetometer/enable", "w") as enabler:
                 enabler.write("1")
         except:
-            print "Error: No Magnometer detected"
+            print ("Error: No Magnometer detected")
 
     def calibrate(self):
         self.valSub = self.get()
@@ -302,7 +304,7 @@ class Gyro:
             with open("/sys/class/misc/FreescaleGyroscope/enable", "w") as enabler:
                 enabler.write("1")
         except:
-            print "Error: No Gyro detected"
+            print ("Error: No Gyro detected")
 
     def calibrate(self):
         self.valSub = self.get()

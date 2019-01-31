@@ -1,11 +1,11 @@
 from os import geteuid
 from time import sleep
 
-from Maps import Maps
-from Resources import MemoryMap, Command
+from .Maps import Maps
+from .Resources import MemoryMap, Command
 
 if geteuid() != 0:
-    print "Please run script as root! (If you are sudo it must be root\nLike this sudo su -c '<command>'"
+    print ("Please run script as root! (If you are sudo it must be root\nLike this sudo su -c '<command>'")
     exit(1)
 
 maps = Maps()
@@ -46,8 +46,8 @@ class Gpio:
     def pin_mode(pin, direction=0):
         try:
             io_maps[pin][1].write_line("in" if direction < 1 else "out")
-        except (ValueError, IndexError, TypeError), e:
-            print e
+        except (ValueError, IndexError, TypeError) as e:
+            print (e)
             raise ValueError("Current distribute %d" % pin)
 
     @staticmethod
@@ -136,7 +136,7 @@ class PWM:
 
     @staticmethod
     def pwm_read(pin):
-        print "Function not available yet"
+        print ("Function not available yet")
 
     @staticmethod
     def release(pin):
@@ -218,7 +218,7 @@ class Temp:
             self.temp = (float(self.mm_temp.read_line().replace(' ', '').replace('\n', ''))) * (
                 0.001)  # Turn into celcius
         except (OSError, IndexError, IOError, ValueError):
-            print "Snap in sensor is not plugged in!"
+            print ("Snap in sensor is not plugged in!")
         finally:
             return (self.temp * 1.8 + 32) if "f" in mode else self.temp  # Either return into Far or Celc
 
@@ -251,7 +251,7 @@ class Barometer:
             self.Tempscale = (float(self.mm_scale.read_line().replace('\n', '')))
             self.temp = (self.temp * self.Tempscale)
         except (IndexError, ValueError, IOError, TypeError, OSError):
-            print "Barometer is not plugged in!"
+            print ("Barometer is not plugged in!")
         finally:
             return (self.temp * 1.8 + 32) if "f" in mode else self.temp
 
@@ -260,7 +260,7 @@ class Barometer:
             self.pressure = (float(self.mm_pressure.read_line().replace('\n', '')))
             self.Tempress = (float(self.mm_pressure_scale.read_line().replace('\n', '')))
         except (IndexError, ValueError, IOError, TypeError, OSError):
-            print "Barometer is not plugged in!"
+            print ("Barometer is not plugged in!")
         finally:
             return float(self.pressure * self.Tempress)
 
@@ -286,7 +286,7 @@ class Accel:
                 enabler.flush()
                 enabler.close()
         except (OSError, IOError, ValueError, TypeError):
-            print "Error: No Accel detected"
+            print ("Error: No Accel detected")
 
         self.mm_accel = MemoryMap("/sys/class/misc/FreescaleAccelerometer/data", "r")
 
@@ -313,7 +313,7 @@ class Accel:
                 except (IndexError, ValueError, TypeError):
                     break
         except (OSError, IOError, TypeError, ValueError):
-            print "Error using accelerometer!"
+            print ("Error using accelerometer!")
         finally:
             for num in range(0, len(self.accel)):
                 self.accel[num] -= self.calib[num]
@@ -342,7 +342,7 @@ class Magno:
                 enabler.flush()
                 enabler.close()
         except (OSError, IOError, ValueError, TypeError):
-            print "Error: No Magnometer detected"
+            print ("Error: No Magnometer detected")
 
         self.mm_magno = MemoryMap("/sys/class/misc/FreescaleMagnetometer/data", "r")
 
@@ -394,7 +394,7 @@ class Gyro:
                 enabler.flush()
                 enabler.close()
         except (OSError, IOError, ValueError, TypeError):
-            print "Error: No Gyro detected"
+            print ("Error: No Gyro detected")
 
         self.mm_gyro = MemoryMap("/sys/class/misc/FreescaleGyroscope/data", "r")
 

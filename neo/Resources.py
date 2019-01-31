@@ -68,7 +68,7 @@ class Command:
         toret = out + ("" if error is None else error)
         code = child.returncode
         if self.prints:
-            print toret
+            print (toret)
         return [code, toret]
 
 
