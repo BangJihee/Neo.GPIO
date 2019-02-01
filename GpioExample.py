@@ -10,10 +10,14 @@ neo = Gpio()  # create new Neo object
 
 pinTwo = 25  # pin to use
 pinThree = 3
+pinFour = 24
+pinFive = 3
+
 
 neo.pinMode(pinTwo, neo.OUTPUT)  # Use innerbank pin 2 and set it as output either 0 (neo.INPUT) or 1 (neo.OUTPUT)
 neo.pinMode(pinThree, neo.INPUT)  # Use pin three(innerbank) and read set state to read
-
+neo.pinMode(pinFour, neo.OUTPUT)  # Use innerbank pin 2 and set it as output either 0 (neo.INPUT) or 1 (neo.OUTPUT)
+neo.pinMode(pinFive, neo.INPUT)  # Use pin three(innerbank) and read set state to read
 # Blink example
 for a in range(0, 10):  # Do for five times
     neo.digitalWrite(pinTwo, neo.HIGH)  # write high value to pin
