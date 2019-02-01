@@ -15,7 +15,7 @@ neo.pinMode(pinTwo, neo.OUTPUT)  # Use innerbank pin 2 and set it as output eith
 neo.pinMode(pinThree, neo.INPUT)  # Use pin three(innerbank) and read set state to read
 
 # Blink example
-for a in range(0, 10):  # Do for five times
+for a in range(0, 5):  # Do for five times
     neo.digitalWrite(pinTwo, neo.HIGH)  # write high value to pin
     sleep(1)  # wait one second
     neo.digitalWrite(pinTwo, neo.LOW)  # write low value to pin
