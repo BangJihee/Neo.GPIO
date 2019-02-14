@@ -1,31 +1,31 @@
-# A easy Gpio library example for the Udoo Neo created by David Smerkous
-# The current things this library can do
-# digitalWriting/Reading - Soon to come PWM
-
-
-
 from neo import Gpio  # import Gpio library
 from time import sleep  # import sleep to wait for blinks
-neo = Gpio()  # create new Neo object
-
-pinTwo = 2  # pin to use
-
-pinThree = 3
 
 
-neo.pinMode(pinTwo, neo.OUTPUT)  # Use innerbank pin 2 and set it as output either 0 (neo.INPUT) or 1 (neo.OUTPUT)
-neo.pinMode(pinThree, neo.INPUT)  # Use pin three(innerbank) and read set state to read
+neo =Gpio()
+
+S0 = 24 # pin to use
+S1 = 25
+S2 = 26
+S3 = 27
+
+pinNum = [S0, S1, S2, S3]
+
+num = [0,0,0,0]
 
 # Blink example
-for a in range(0, 5):  # Do for five times
-    neo.digitalWrite(pinTwo, neo.HIGH)  # write high value to pin
+for i in range(4):
+    neo.pinMode(pinNum[i], neo.OUTPUT)
 
-sleep(1)  # wait one second
+neo.digitalWrite(pinNum[0], 0)
+sleep(0.5)
+neo.digitalWrite(pinNum[1], 0)
+sleep(0.5)
+neo.digitalWrite(pinNum[2], 1)
+sleep(0.5)
+neo.digitalWrite(pinNum[3], 1)
+sleep(0.5)
 
-neo.digitalWrite(pinTwo, neo.LOW)  # write low value to pin
-
-sleep(1)  # wait one second
-
-# Read pin
-print("Current pin(" + str(pinThree) + ") state is: " + str(
-    neo.digitalRead(pinThree))) # read current value of pinThree(To succesfully read a pin it must
+raw = int(open("/sys/bus/iio/devices/iio:device0/in_voltage0_raw").read())
+scale = float(open("/sys/bus/iio/devices/iio:device0/in_voltage_scale").read())
+print (raw * scale)
